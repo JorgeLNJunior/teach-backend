@@ -19,6 +19,14 @@ class User extends Model {
         userInstance.password = await Hash.make(userInstance.password)
       }
     })
+
+    /**
+     * A hook to auto generate user activation code
+     * before create a user
+     */
+    this.addHook('beforeCreate', async (userInstance) => {
+      userInstance.activation_code = Math.floor(1000 + Math.random() * 9000)
+    })
   }
 
   /**

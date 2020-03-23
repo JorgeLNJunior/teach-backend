@@ -10,6 +10,9 @@ class UserSchema extends Schema {
       table.string('username', 80).notNullable().unique()
       table.string('email', 254).notNullable().unique()
       table.string('password', 60).notNullable()
+      table.string('avatar')
+      table.integer('activation_code')
+      table.boolean('is_activated').defaultTo(false)
       table.timestamps()
     })
   }
