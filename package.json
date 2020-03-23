@@ -1,8 +1,8 @@
 {
-  "name": "adonis-api-app",
-  "version": "4.1.0",
+  "name": "teach",
+  "version": "0.1.0",
   "adonis-version": "4.1.0",
-  "description": "Adonisjs boilerplate for API server with pre-configured JWT",
+  "description": "rede social com foco no incentivo ao ensino e educação",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
@@ -12,8 +12,8 @@
     "adonisjs",
     "adonis-app"
   ],
-  "author": "",
-  "license": "UNLICENSED",
+  "author": "JorgeLNJunior e HOK21GOKUT",
+  "license": "Apache 2.0",
   "private": true,
   "dependencies": {
     "@adonisjs/ace": "^5.0.8",
