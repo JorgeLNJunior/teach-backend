@@ -23,12 +23,13 @@ class AuthController {
    */
   async register({request, response}) {
 
-    const { username, email, password } = request.body
+    const { username, email, password, age } = request.body
 
     const rules = {
       username: 'required|unique:users|min:3|max:30',
       email: 'required|email|unique:users',
-      password: 'required|min:6|max:20'
+      password: 'required|min:6|max:20',
+      age: 'required|above:11'
     }
 
     const validation = await validate(request.body, rules)
@@ -40,7 +41,8 @@ class AuthController {
     const user = await User.create({
       username: username,
       password: password,
-      email: email
+      email: email,
+      age: age
     })
 
     return response.status(201).json({ message: 'user registred', user: user })
