@@ -46,6 +46,25 @@ class AuthController {
     return response.status(201).json({ message: 'user registred', user: user })
 
   }
+
+  /**
+   * User login
+   * POST /login
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   * @param {AuthSession} ctx.auth
+   */
+  async login({ request, response, auth }) {
+
+    const { email, password } = request.body
+
+    const token = await auth.attempt(email, password)
+
+    return token
+
+  }
 }
 
 module.exports = AuthController
