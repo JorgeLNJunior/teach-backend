@@ -26,6 +26,10 @@ Route.group('users', () => {
   Route.resource('/users', 'UserController').apiOnly().except(['store'])
 }).middleware('auth')
 
+Route.get('/users/:id/posts', 'PostController.userPosts').middleware('auth')
+
+
+//Posts routes
 Route.group('posts', () => {
   Route.resource('/posts', 'PostController').apiOnly()
 }).middleware('auth')

@@ -1,6 +1,7 @@
 'use strict'
 
 const Post = use('App/Models/Post')
+const User = use('App/Models/User')
 const { validate } = use('Validator')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -19,11 +20,13 @@ class PostController {
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
-   * @param {View} ctx.view
+   * @param {AuthSession} ctx.auth
    */
-  async index ({ request, response, view }) {
+  async index ({ request, response, auth }) {
 
-    const posts = await Post.all()
+    const user = await User.find(auth.user.id)
+
+    const posts = await user.posts().fetch()
 
     return response.json(posts)
 
@@ -70,13 +73,15 @@ class PostController {
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
-   * @param {View} ctx.view
+   * @param {AuthSession} ctx.auth
    */
-  async show ({ params, request, response }) {
+  async show ({ params, request, response, auth }) {
 
     const { id } = params
 
-    const post = await Post.find(id)
+    const user = await User.find(auth.user.id)
+
+    const post = await user.posts().where('id', id).fetch()
 
     return response.json(post)
 
@@ -140,6 +145,7 @@ class PostController {
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
+   * @param {AuthSession} ctx.auth
    */
   async destroy ({ params, request, response, auth }) {
 
@@ -160,6 +166,7 @@ class PostController {
     return response.json({ message: 'post deleted' })
 
   }
+
 }
 
 module.exports = PostController
