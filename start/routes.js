@@ -25,3 +25,8 @@ Route.post('/login', 'AuthController.login')
 Route.group('users', () => {
   Route.resource('/users', 'UserController').apiOnly().except(['store'])
 }).middleware('auth')
+
+Route.group('posts', () => {
+  Route.resource('/posts', 'PostController').apiOnly()
+}).middleware('auth')
+
