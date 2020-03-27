@@ -32,3 +32,16 @@ Route.group('posts', () => {
   Route.resource('/posts', 'PostController').apiOnly()
 }).middleware('auth')
 
+//Comments routes
+Route.post('/posts/:post_id/comments', 'CommentController.store').middleware('auth')
+
+Route.get('/posts/:post_id/comments', 'CommentController.index').middleware('auth')
+
+Route.get('/posts/:post_id/comments/:comment_id', 'CommentController.show').middleware('auth')
+
+Route.put('/comments/:id', 'CommentController.update').middleware('auth')
+
+Route.delete('/comments/:id', 'CommentController.destroy').middleware('auth')
+
+
+

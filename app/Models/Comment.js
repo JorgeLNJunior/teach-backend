@@ -3,29 +3,29 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 
-class Post extends Model {
+class Comment extends Model {
 
   /**
    * User relationship
    *
-   * @method user
+   * @method users
    *
    * @return {Object}
    */
-  user () {
+  user() {
     return this.belongsTo('App/Models/User')
   }
 
   /**
-   * Comment relationship
+   * Post relationship
    *
-   * @method comments
+   * @method posts
    *
    * @return {Object}
    */
-  comments () {
-    return this.hasMany('App/Models/Comment')
+  post() {
+    return this.belongsTo('App/Models/Post')
   }
 }
 
-module.exports = Post
+module.exports = Comment
