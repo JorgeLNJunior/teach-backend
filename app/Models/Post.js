@@ -26,6 +26,17 @@ class Post extends Model {
   comments () {
     return this.hasMany('App/Models/Comment')
   }
+
+  /**
+   * Likes relationship
+   *
+   * @method user
+   *
+   * @return {Object}
+   */
+  Likes () {
+    return this.hasMany('App/Models/Like')
+  }
 }
 
 module.exports = Post

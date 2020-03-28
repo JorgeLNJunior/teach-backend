@@ -64,6 +64,17 @@ class User extends Model {
   comments () {
     return this.hasMany('App/Models/Comment')
   }
+
+  /**
+   * Likes relationship
+   *
+   * @method likes
+   *
+   * @return {Object}
+   */
+  likes () {
+    return this.hasMany('App/Models/Like')
+  }
 }
 
 module.exports = User

@@ -3,32 +3,31 @@
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
-class CommentSchema extends Schema {
+class LikeSchema extends Schema {
   up () {
-    this.create('comments', (table) => {
+    this.create('likes', (table) => {
       table.increments()
       table.integer('user_id')
         .references('id')
         .inTable('users')
-        .unsigned()
         .notNullable()
+        .unsigned()
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
       table.integer('post_id')
         .references('id')
         .inTable('posts')
-        .unsigned()
         .notNullable()
+        .unsigned()
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
-      table.string('content', 800).notNullable()
       table.timestamps()
     })
   }
 
   down () {
-    this.drop('comments')
+    this.drop('likes')
   }
 }
 
-module.exports = CommentSchema
+module.exports = LikeSchema

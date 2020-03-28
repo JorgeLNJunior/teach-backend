@@ -43,5 +43,12 @@ Route.put('/comments/:id', 'CommentController.update').middleware('auth')
 
 Route.delete('/comments/:id', 'CommentController.destroy').middleware('auth')
 
+//Likes routes
+Route.post('/posts/:post_id/likes', 'LikeController.store').middleware('auth')
+
+Route.get('/likes', 'LikeController.index').middleware('auth')
+
+Route.delete('/posts/:post_id/likes', 'LikeController.destroy').middleware('auth')
+
 
 
