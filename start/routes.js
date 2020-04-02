@@ -50,5 +50,13 @@ Route.get('/likes', 'LikeController.index').middleware('auth')
 
 Route.delete('/posts/:post_id/likes', 'LikeController.destroy').middleware('auth')
 
+//Follow routes
+Route.post('users/follows/:followed_user_id', 'FollowController.store').middleware('auth')
+
+Route.delete('users/follows/:followed_user_id', 'FollowController.destroy').middleware('auth')
+
+Route.get('users/:user_id/follows', 'FollowController.index').middleware('auth')
+
+
 
 
