@@ -2,6 +2,7 @@
 
 const Like = use('App/Models/Like')
 const User = use('App/Models/User')
+const Post = use('App/Models/Post')
 const Database = use('Database')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -13,21 +14,50 @@ const Database = use('Database')
  */
 class LikeController {
   /**
-   * Show a list of all likes.
-   * GET likes
+   * Show a list of all user likes.
+   * GET /users/:id/likes
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
-   * @param {AuthSession} ctx.auth
    */
-  async index ({ request, response, auth }) {
+  async userLikes ({ request, response, params }) {
 
-    const user = await User.find(auth.user.id)
+    const { id } = params
 
-    const likes = user.likes().fetch()
+    const user = await User.find(id)
 
-    return likes;
+    if(!user) {
+      return response.status(404).json({ error: 'user not found' })
+    }
+
+    const likes = await user.likes().fetch()
+
+    return response.json(likes);
+
+  }
+
+  /**
+   * Show a list of all post likes.
+   * GET /posts/:id/likes
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
+  async postLikes ({ request, response, params }) {
+
+    const { id } = params
+
+    const post = await Post.find(id)
+
+    if(!post) {
+      return response.status(404).json({ error: 'post not found' })
+    }
+
+    const likes = await post.likes().fetch()
+
+    return response.json(likes);
 
   }
 
@@ -61,18 +91,6 @@ class LikeController {
   }
 
   /**
-   * Display a single like.
-   * GET likes/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
    * Delete a like with id.
    * DELETE likes/:id
    *
@@ -97,8 +115,6 @@ class LikeController {
     const like_id = like.map((data) => {
       return data.id
     })
-
-    console.log(like_id)
 
     like = await Like.find(like_id)
 

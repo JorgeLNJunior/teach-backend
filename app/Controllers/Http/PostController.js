@@ -14,15 +14,15 @@ const { validate } = use('Validator')
  */
 class PostController {
   /**
-   * Show a list of all posts.
-   * GET posts
+   * Show a list of all user posts.
+   * GET /users/:id/posts
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {AuthSession} ctx.auth
    */
-  async index ({ request, response, auth }) {
+  async userPosts ({ request, response, auth }) {
 
     const user = await User.find(auth.user.id)
 

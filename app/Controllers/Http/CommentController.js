@@ -14,14 +14,14 @@ const { validate } = use('Validator')
 class CommentController {
   /**
    * Show a list of all comments on a post.
-   * GET comments
+   * GET /post/:post_id/comments
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, params }) {
+  async postComments ({ request, response, params }) {
 
     const { post_id } = params
 
@@ -39,7 +39,7 @@ class CommentController {
 
   /**
    * Create/save a new comment.
-   * POST comments
+   * POST /post/:post_id/comments
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -89,17 +89,11 @@ class CommentController {
    */
   async show ({ params, request, response }) {
 
-    const { post_id, comment_id } = params
+    const { id } = params
 
-    const post = await Post.find(post_id)
+    const comment = await Comment.find(id)
 
-    if(!post) {
-      return response.status(404).json({ error: 'post not found' })
-    }
-
-    const comment = await post.comments().where('id', comment_id).fetch()
-
-    if(comment.rows.length <= 0) {
+    if(!comment) {
       return response.status(404).json({ error: 'comment not found' })
     }
 

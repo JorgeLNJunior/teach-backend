@@ -12,7 +12,7 @@ class Post extends Model {
    *
    * @return {Object}
    */
-  user () {
+  user() {
     return this.belongsTo('App/Models/User')
   }
 
@@ -23,7 +23,7 @@ class Post extends Model {
    *
    * @return {Object}
    */
-  comments () {
+  comments() {
     return this.hasMany('App/Models/Comment')
   }
 
@@ -34,7 +34,7 @@ class Post extends Model {
    *
    * @return {Object}
    */
-  Likes () {
+  likes() {
     return this.hasMany('App/Models/Like')
   }
 }

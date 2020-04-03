@@ -41,18 +41,18 @@ class Like extends Model {
    * @return {Object}
    */
   user() {
-    this.hasOne('App/Models/User')
+    return this.belongsTo('App/Models/User')
   }
 
   /**
    * Post relationship
    *
-   * @method user
+   * @method post
    *
    * @return {Object}
    */
   post() {
-    this.hasOne('App/Model/Post')
+    return this.belongsTo('App/Model/Post')
   }
 }
 
