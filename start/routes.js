@@ -26,26 +26,17 @@ Route.group('users', () => {
   Route.resource('/users', 'UserController').apiOnly().except(['store']).except('index')
 }).middleware('auth')
 
-//list all user posts
-Route.get('/users/:id/posts', 'PostController.userPosts').middleware('auth')
-
-//list all user likes
-Route.get('/users/:id/likes', 'LikeController.userLikes').middleware('auth')
-
-//list all user follows
-Route.get('users/:user_id/follows', 'FollowController.index').middleware('auth')
-
 
 //Posts routes
 Route.group('posts', () => {
   Route.resource('/posts', 'PostController').apiOnly().except('index')
 }).middleware('auth')
 
-//list all post likes
-Route.get('/posts/:id/likes', 'LikeController.postLikes').middleware('auth')
+//list all user posts
+Route.get('/users/:id/posts', 'PostController.userPosts').middleware('auth')
 
-//list all comments on a post
-Route.get('/posts/:post_id/comments', 'CommentController.postComments').middleware('auth')
+//list all follow users posts
+Route.get('/follows/posts', 'PostController.followUsersPosts').middleware('auth')
 
 
 //Comments routes
@@ -61,6 +52,9 @@ Route.put('/comments/:id', 'CommentController.update').middleware('auth')
 //delete a comment
 Route.delete('/comments/:id', 'CommentController.destroy').middleware('auth')
 
+//list all comments on a post
+Route.get('/posts/:post_id/comments', 'CommentController.postComments').middleware('auth')
+
 
 //Likes routes
 //insert a like on a post
@@ -69,13 +63,22 @@ Route.post('/posts/:post_id/likes', 'LikeController.store').middleware('auth')
 //remove a like on a post
 Route.delete('/posts/:post_id/likes', 'LikeController.destroy').middleware('auth')
 
+//list all user likes
+Route.get('/users/:id/likes', 'LikeController.userLikes').middleware('auth')
+
+//list all post likes
+Route.get('/posts/:id/likes', 'LikeController.postLikes').middleware('auth')
+
 
 //Follow routes
 //follow a user
-Route.post('users/follows/:followed_user_id', 'FollowController.store').middleware('auth')
+Route.post('/users/follows/:followed_user_id', 'FollowController.store').middleware('auth')
 
 //unfollow a user
-Route.delete('users/follows/:followed_user_id', 'FollowController.destroy').middleware('auth')
+Route.delete('/users/follows/:followed_user_id', 'FollowController.destroy').middleware('auth')
+
+//list all user follows
+Route.get('/users/:user_id/follows', 'FollowController.index').middleware('auth')
 
 
 

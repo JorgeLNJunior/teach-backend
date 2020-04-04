@@ -167,6 +167,43 @@ class PostController {
 
   }
 
+  /**
+   * Show a list of all user posts.
+   * GET /users/:id/posts
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   * @param {AuthSession} ctx.auth
+   */
+  async followUsersPosts ({ request, response, auth }) {
+
+    const user_id = auth.user.id
+
+    const user = await User.find(user_id)
+
+    const follows = await user.follows().fetch()
+
+    const posts = []
+
+    for(let follow of follows.rows) {
+
+      const usr = await User.find(follow.$attributes.followed_user_id)
+
+      const usr_posts = await usr.posts().fetch()
+
+      for(let received_posts of usr_posts.rows) {
+
+        posts.push(received_posts)
+
+      }
+
+    }
+
+    return response.json(posts)
+
+  }
+
 }
 
 module.exports = PostController
