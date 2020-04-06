@@ -26,6 +26,7 @@
     "@adonisjs/ignitor": "^2.0.8",
     "@adonisjs/lucid": "^6.1.3",
     "@adonisjs/validator": "^5.0.6",
+    "@sendgrid/mail": "^7.0.0",
     "adonis-drive-azure-storage": "^4.1.4",
     "mysql": "^2.18.1"
   },

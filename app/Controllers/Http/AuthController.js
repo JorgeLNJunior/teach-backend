@@ -2,6 +2,7 @@
 
 const User = use('App/Models/User')
 const { validate } = use('Validator')
+const UserService = require('../../Services/UserRegistration')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -44,6 +45,10 @@ class AuthController {
       email: email,
       age: age
     })
+
+    const mailSend = new UserService(user)
+
+    mailSend.sendVerificationEmail()
 
     return response.status(201).json({ message: 'user registred', user: user })
 
