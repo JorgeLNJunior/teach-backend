@@ -2,6 +2,9 @@
 
 const User = use('App/Models/User')
 const { validate } = use('Validator')
+const Helpers = use('Helpers')
+const Drive = use('Drive')
+const fs = require('fs')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -123,6 +126,56 @@ class UserController {
     return response.json({ message: 'user deleted' })
 
   }
+
+  /**
+   * Upload user avatar
+   * POST /users/avatar
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   * @param {AuthSession} ctx.auth
+   */
+  async uploadAvatar ({ request, response, auth }) {
+
+    const avatar = request.file('avatar', {
+      types: ['image'],
+      size: '4mb',
+      extnames: ['png', 'jpg', 'jpeg']
+    })
+
+    await avatar.move(Helpers.tmpPath('uploads'), {
+      name: `${new Date().getTime()}.${avatar.subtype}`,
+      overwrite: true
+    })
+
+    if (!avatar.moved()) {
+      return avatar.error()
+    }
+
+    const path = `${Helpers.tmpPath('uploads')}/${avatar.fileName}`
+
+    const buffer = fs.readFileSync(path)
+
+    await Drive.disk('azure').put(`avatars/${avatar.fileName}`, buffer)
+
+    const url = await Drive.disk('azure').getUrl(`avatars/${avatar.fileName}`)
+
+    fs.unlinkSync(path)
+
+    const user = await User.find(auth.user.id)
+
+    user.avatar = url
+
+    await user.save()
+
+    return response.json({
+      message: 'image uploaded',
+      url: url
+    })
+
+  }
+
 }
 
 module.exports = UserController
