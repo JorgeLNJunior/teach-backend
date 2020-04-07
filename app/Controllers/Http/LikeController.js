@@ -75,6 +75,10 @@ class LikeController {
     const { post_id } = params
     const user_id = auth.user.id
 
+    if(! await Post.find(post_id)) {
+      return response.status(404).json({ error: 'post not found' })
+    }
+
     let like = await Database.from('likes').where({user_id: user_id, post_id: post_id})
 
     if(like.length > 0) {
@@ -104,13 +108,15 @@ class LikeController {
     const { post_id } = params
     const user_id = auth.user.id
 
+    if(! await Post.find(post_id)) {
+      return response.status(404).json({ error: 'post not found' })
+    }
+
     let like = await Database.from('likes').where({user_id: user_id, post_id: post_id})
 
     if(like.length <= 0) {
       return response.status(404).json({ error: 'like not found' })
     }
-
-    console.log(like)
 
     const like_id = like.map((data) => {
       return data.id

@@ -15,7 +15,9 @@ class Like extends Model {
     this.addHook('afterCreate', async (likeInstance) => {
 
       const post = await Post.find(likeInstance.post_id)
-      post.likes ++
+
+      post.$attributes.likes ++
+
       await post.save()
 
     })
@@ -26,7 +28,9 @@ class Like extends Model {
     this.addHook('afterDelete', async (likeInstance) => {
 
       const post = await Post.find(likeInstance.post_id)
-      post.likes --
+
+      post.$attributes.likes --
+
       await post.save()
 
     })
