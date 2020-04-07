@@ -23,66 +23,81 @@ Route.post('/login', 'AuthController.login')
 
 //Users routes
 Route.group('users', () => {
-  Route.resource('/users', 'UserController').apiOnly().except(['store'])
-}).middleware('auth')
 
-//upload user avatar
-Route.post('/users/avatar', 'UserController.uploadAvatar').middleware('auth')
+  Route.resource('/users', 'UserController').apiOnly().except(['store'])
+
+  //upload user avatar
+  Route.post('/users/avatar', 'UserController.uploadAvatar')
+
+}).middleware('auth')
 
 
 //Posts routes
 Route.group('posts', () => {
+
   Route.resource('/posts', 'PostController').apiOnly().except('index')
+
+  //list all user posts
+  Route.get('/users/:id/posts', 'PostController.userPosts')
+
+  //list all follow users posts
+  Route.get('/follows/posts', 'PostController.followUsersPosts')
+
 }).middleware('auth')
-
-//list all user posts
-Route.get('/users/:id/posts', 'PostController.userPosts').middleware('auth')
-
-//list all follow users posts
-Route.get('/follows/posts', 'PostController.followUsersPosts').middleware('auth')
 
 
 //Comments routes
-//insert a comment
-Route.post('/posts/:post_id/comments', 'CommentController.store').middleware('auth')
+Route.group('comments', () => {
 
-//show a comment
-Route.get('/comments/:id', 'CommentController.show').middleware('auth')
+  //insert a comment
+  Route.post('/posts/:post_id/comments', 'CommentController.store')
 
-//update a comment
-Route.put('/comments/:id', 'CommentController.update').middleware('auth')
+  //show a comment
+  Route.get('/comments/:id', 'CommentController.show')
 
-//delete a comment
-Route.delete('/comments/:id', 'CommentController.destroy').middleware('auth')
+  //update a comment
+  Route.put('/comments/:id', 'CommentController.update')
 
-//list all comments on a post
-Route.get('/posts/:post_id/comments', 'CommentController.postComments').middleware('auth')
+  //delete a comment
+  Route.delete('/comments/:id', 'CommentController.destroy')
+
+  //list all comments on a post
+  Route.get('/posts/:post_id/comments', 'CommentController.postComments')
+
+}).middleware('auth')
+
+
 
 
 //Likes routes
-//insert a like on a post
-Route.post('/posts/:post_id/likes', 'LikeController.store').middleware('auth')
+Route.group('likes', () => {
 
-//remove a like on a post
-Route.delete('/posts/:post_id/likes', 'LikeController.destroy').middleware('auth')
+  //insert a like on a post
+  Route.post('/posts/:post_id/likes', 'LikeController.store')
 
-//list all user likes
-Route.get('/users/:id/likes', 'LikeController.userLikes').middleware('auth')
+  //remove a like on a post
+  Route.delete('/posts/:post_id/likes', 'LikeController.destroy')
 
-//list all post likes
-Route.get('/posts/:id/likes', 'LikeController.postLikes').middleware('auth')
+  //list all user likes
+  Route.get('/users/:id/likes', 'LikeController.userLikes')
+
+  //list all post likes
+  Route.get('/posts/:id/likes', 'LikeController.postLikes')
+
+}).middleware('auth')
 
 
 //Follow routes
-//follow a user
-Route.post('/users/follows/:followed_user_id', 'FollowController.store').middleware('auth')
+Route.group('follows', () => {
 
-//unfollow a user
-Route.delete('/users/follows/:followed_user_id', 'FollowController.destroy').middleware('auth')
+  //follow a user
+  Route.post('/users/follows/:followed_user_id', 'FollowController.store')
 
-//list all user follows
-Route.get('/users/:user_id/follows', 'FollowController.index').middleware('auth')
+  //unfollow a user
+  Route.delete('/users/follows/:followed_user_id', 'FollowController.destroy')
 
+  //list all user follows
+  Route.get('/users/:user_id/follows', 'FollowController.index')
 
-
+}).middleware('auth')
 
