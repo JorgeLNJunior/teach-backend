@@ -82,9 +82,11 @@ class PostController {
 
     const { id } = params
 
-    const user = await User.find(auth.user.id)
+    const post = await Post.find(id)
 
-    const post = await user.posts().where('id', id).fetch()
+    if(!post) {
+      return response.status(404).json({ error: 'post not found' })
+    }
 
     return response.json(post)
 
