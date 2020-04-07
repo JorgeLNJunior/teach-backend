@@ -43,6 +43,9 @@ Route.group('posts', () => {
   //list all follow users posts
   Route.get('/follows/posts', 'PostController.followUsersPosts')
 
+  //upload video
+  Route.post('/posts/:id/video', 'PostController.uploadVideo')
+
 }).middleware('auth')
 
 

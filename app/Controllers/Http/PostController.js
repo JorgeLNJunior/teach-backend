@@ -2,7 +2,10 @@
 
 const Post = use('App/Models/Post')
 const User = use('App/Models/User')
+const Helpers = use('Helpers')
+const Drive = use('Drive')
 const { validate } = use('Validator')
+const fs = require('fs')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -201,6 +204,53 @@ class PostController {
     }
 
     return response.json(posts)
+
+  }
+
+  /**
+   * Upload video
+   * POST /posts/:id/video
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   * @param {AuthSession} ctx.auth
+   */
+  async uploadVideo ({ request, response, auth, params }) {
+
+    const { id } = request.params
+    const user_id = auth.user.id
+
+    let post = await Post.find(id)
+
+    if(!post) {
+      return response.status(404).json({ error: 'post not found' })
+    }
+
+    if(post.user_id != user_id) {
+      return response.status(403).json({ error: 'unauthorized' })
+    }
+
+    let fileName = undefined
+
+    request.multipart.file('video', {}, async (file) => {
+      const name = `${new Date().getTime()}.${file.subtype}`
+      await Drive.disk('azure').putStream(`videos/${name}`, file.stream)
+      fileName = name
+    })
+
+    await request.multipart.process()
+
+    const url = await Drive.disk('azure').getUrl(`videos/${fileName}`)
+
+    post.video_content = url
+
+    await post.save()
+
+    return response.json({
+      message: 'video uploaded',
+      url: url
+    })
 
   }
 
