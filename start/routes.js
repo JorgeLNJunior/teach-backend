@@ -14,7 +14,16 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
+/** @typedef {import('@adonisjs/framework/src/Request')} Request */
+/** @typedef {import('@adonisjs/framework/src/Response')} Response */
 const Route = use('Route')
+
+//Docs
+Route.get('/docs', async ({ request, response }) => {
+
+  return response.redirect('https://api-teach-docs.netlify.com/')
+
+})
 
 //Register and login routes
 Route.post('/register', 'AuthController.register')
@@ -30,6 +39,9 @@ Route.group('users', () => {
   Route.post('/users/avatar', 'UserController.uploadAvatar')
 
 }).middleware('auth')
+
+//activate user account
+Route.get('/activate/', 'AuthController.activate')
 
 
 //Posts routes
