@@ -20,7 +20,7 @@ Para que seja possível realizar a execução do projeto alguns itens devem ser 
 
 ## Configuração
 
-Dentro da raiz do projeto renomeie o arquivo `.env.example` para `.env`. Com o terminal aberto na raiz do projeto execute o comando `adonis key:generate` para gerar a `APP_KEY`, então altere os campos `DB_USER` e `DB_PASSWORD` de acordo com a configuração do seu banco de dados, altere `DB_CONNECTION` para `mysql` e `DB_DATABASE` para o nome da sua base de dados. Agora execute o comando `npm i` para instalar as dependências do projeto e `npm i mysql` para instalar a dependência do MySql. Mais iformações sobre a configuração podem ser encontradas na [Documentação do AdonisJs](https://adonisjs.com/docs/4.1/configuration-and-env).
+Dentro da raiz do projeto renomeie o arquivo `.env.example` para `.env`. Com o terminal aberto na raiz do projeto execute o comando `adonis key:generate` para gerar a `APP_KEY`, então altere os campos `DB_USER` e `DB_PASSWORD` de acordo com a configuração do seu banco de dados, altere `DB_CONNECTION` para `mysql` e `DB_DATABASE` para o nome da sua base de dados. Altere `AZURE_CONNECTION_STRING` e `AZURE_CONTAINER` de acordo com sua conta Azure storage, e `SENDGRID_API_KEY` com a sua chave Sendgrid. Execute o comando `npm i` para instalar as dependências do projeto. Mais iformações sobre a configuração podem ser encontradas na [Documentação do AdonisJs](https://adonisjs.com/docs/4.1/configuration-and-env).
 
 ## Vs Code, extensões recomendadas
 
