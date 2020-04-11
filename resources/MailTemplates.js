@@ -20,7 +20,7 @@ const userRegistration = (user) => {
     html: `<h2> Olá ${username} </h2>\n
       <p>
         Bem-vindo(a) a Teach, por favor confirme seu endereço de email para que
-        sua conta para que ela possa ser utilizada.
+        sua conta possa ser utilizada.
       </p>\n
 
       <b>Nome: ${username}</b><br>\n

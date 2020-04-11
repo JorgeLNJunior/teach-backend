@@ -67,9 +67,45 @@ class AuthController {
 
     const { email, password } = request.body
 
+    const user = await User.findBy('email', email)
+
+    if(!user.is_activated) {
+      return response.status(403).json({ error: 'account not activated, please check your email' })
+    }
+
     const token = await auth.attempt(email, password)
 
     return token
+
+  }
+
+  /**
+   * Activate user account
+   * GET /activate
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
+  async activate({ request, response }) {
+
+    const { id, code } = request.all()
+
+    const user = await User.find(id)
+
+    if(!user) {
+      return response.status(404).json({ error: 'user not found' })
+    }
+
+    if(user.activation_code != code) {
+      return response.status(422).json({ error: 'invalid code' })
+    }
+
+    user.is_activated = true
+
+    await user.save()
+
+    return response.json({ message: 'account activated' })
 
   }
 }
