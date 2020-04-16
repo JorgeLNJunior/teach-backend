@@ -2,10 +2,8 @@
 
 const Post = use('App/Models/Post')
 const User = use('App/Models/User')
-const Helpers = use('Helpers')
 const Drive = use('Drive')
 const { validate } = use('Validator')
-const fs = require('fs')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -23,15 +21,27 @@ class PostController {
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
-   * @param {AuthSession} ctx.auth
    */
-  async userPosts ({ request, response, auth }) {
+  async userPosts ({ request, response, params }) {
 
-    const user = await User.find(auth.user.id)
+    const { id } = params
+
+    const user = await User.find(id)
+
+    if(!user) {
+      return response.status(404).json({ error: 'user not found' })
+    }
 
     const posts = await user.posts().fetch()
 
-    return response.json(posts)
+    return response.json({
+      user: {
+        id: user.id,
+        username: user.username,
+        avatar: user.avatar
+      },
+      posts: posts
+    })
 
   }
 
