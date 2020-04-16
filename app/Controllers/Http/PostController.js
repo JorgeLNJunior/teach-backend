@@ -88,7 +88,7 @@ class PostController {
    * @param {Response} ctx.response
    * @param {AuthSession} ctx.auth
    */
-  async show ({ params, request, response, auth }) {
+  async show ({ params, request, response }) {
 
     const { id } = params
 
@@ -98,7 +98,19 @@ class PostController {
       return response.status(404).json({ error: 'post not found' })
     }
 
-    return response.json(post)
+    const user = await post.user().fetch()
+
+    const comments = await post.comments().fetch()
+
+    return response.json({
+      owner_user: {
+        id: user.id,
+        username: user.username,
+        avatar: user.avatar
+      },
+      post: post,
+      post_comments: comments
+    })
 
   }
 
