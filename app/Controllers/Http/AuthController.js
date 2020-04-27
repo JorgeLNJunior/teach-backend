@@ -67,13 +67,13 @@ class AuthController {
 
     const { email, password } = request.body
 
+    const token = await auth.attempt(email, password)
+
     const user = await User.findBy('email', email)
 
     if(!user.is_activated) {
       return response.status(403).json({ error: 'account not activated, please check your email' })
     }
-
-    const token = await auth.attempt(email, password)
 
     return token
 
