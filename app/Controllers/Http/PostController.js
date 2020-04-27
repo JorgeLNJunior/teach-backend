@@ -205,9 +205,7 @@ class PostController {
    */
   async followUsersPosts ({ request, response, auth }) {
 
-    const user_id = auth.user.id
-
-    const user = await User.find(user_id)
+    const user = await User.find(auth.user.id)
 
     const follows = await user.follows().fetch()
 
@@ -215,13 +213,22 @@ class PostController {
 
     for(let follow of follows.rows) {
 
-      const usr = await User.find(follow.$attributes.followed_user_id)
+      const followedUser = await User.find(follow.$attributes.followed_user_id)
 
-      const usr_posts = await usr.posts().fetch()
+      const followedUserPosts = await followedUser.posts().fetch()
 
-      for(let received_posts of usr_posts.rows) {
+      for(let post of followedUserPosts.rows) {
 
-        posts.push(received_posts)
+        const obj = {
+          owner_user: {
+            id: followedUser.$attributes.id,
+            username: followedUser.$attributes.username,
+            avatar: followedUser.$attributes.avatar
+          },
+          post: post
+        }
+
+        posts.push(obj)
 
       }
 
