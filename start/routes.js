@@ -33,10 +33,13 @@ Route.post('/login', 'AuthController.login')
 //Users routes
 Route.group('users', () => {
 
-  Route.resource('/users', 'UserController').apiOnly().except(['store'])
+  Route.resource('/users', 'UserController').apiOnly().except(['store', 'index', 'show'])
 
   //upload user avatar
   Route.post('/users/avatar', 'UserController.uploadAvatar')
+
+  //show a user
+  Route.get('/users/:id?', 'UserController.show')
 
 }).middleware('auth')
 

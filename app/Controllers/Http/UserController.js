@@ -15,26 +15,10 @@ const fs = require('fs')
  * Resourceful controller for interacting with users
  */
 class UserController {
-  /**
-   * Show a list of all users.
-   * GET users
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
-
-    const users = await User.all()
-
-    return response.json({ users: users })
-
-  }
 
   /**
    * Display a single user.
-   * GET users/:id
+   * GET users/:id? or users/?username=username or users/?email=email
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -44,14 +28,72 @@ class UserController {
   async show ({ params, request, response }) {
 
     const { id } = params
+    const { username, email } = request.get()
 
-    const user = await User.find(id)
+    if(username) {
 
-    if(!user) {
-      return response.status(404).json({ error: 'user not found' })
+      const users = await User.query().where('username', 'LIKE', `%${username}%`).fetch()
+
+      const formatedUsers = []
+
+      for(let user of users.rows) {
+
+        let obj = {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          avatar: user.avatar,
+          age: user.age,
+          created_at: user.created_at
+        }
+
+        formatedUsers.push(obj)
+
+      }
+
+      return response.json(formatedUsers)
+
     }
 
-    return response.json(user)
+    if(email) {
+
+      const user = await User.findBy('email', email)
+
+      if(!user) {
+        return response.status(404).json({ error: 'there is no user with this email' })
+      }
+
+      return response.json({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        avatar: user.avatar,
+        age: user.age,
+        created_at: user.created_at
+      })
+
+    }
+
+    if(id) {
+
+      const user = await User.find(id)
+
+      if(!user) {
+        return response.status(404).json({ error: 'user not found' })
+      }
+
+      return response.json({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        avatar: user.avatar,
+        age: user.age,
+        created_at: user.created_at
+      })
+
+    }
+
+    return response.json({ error: 'no valid query provided' })
 
   }
 
