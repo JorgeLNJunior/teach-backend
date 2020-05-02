@@ -1,4 +1,4 @@
-const { userRegistration } = require('../../resources/MailTemplates')
+const { userRegistration, passwordRecovery } = require('../../resources/MailTemplates')
 const SgMail = require('@sendgrid/mail')
 
 class UserRegistration {
@@ -10,6 +10,16 @@ class UserRegistration {
   async sendVerificationEmail() {
 
     const data = userRegistration(this.user)
+
+    SgMail.setApiKey(process.env.SENDGRID_API_KEY)
+
+    SgMail.send(data)
+
+  }
+
+  async sendPasswordRecoveryEmail() {
+
+    const data = passwordRecovery(this.user)
 
     SgMail.setApiKey(process.env.SENDGRID_API_KEY)
 

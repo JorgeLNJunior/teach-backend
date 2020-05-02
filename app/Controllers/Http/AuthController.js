@@ -3,10 +3,12 @@
 const User = use('App/Models/User')
 const { validate } = use('Validator')
 const UserService = require('../../Services/UserRegistration')
+const Hash = use('Hash')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/auth/src/Schemes/Session')} AuthSession */
+/** @typedef {import('@adonisjs/framework/src/Hash')} Hash */
 
 /**
  * Controller to register, authenticate and activate user accounts
@@ -108,6 +110,87 @@ class AuthController {
     return response.json({ message: 'account activated' })
 
   }
+
+  /**
+   * Recovery user password
+   * POST /password-recovery?email=email
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
+  async passwordRecovery({ request, response }) {
+
+    //Ler observações do arquivo /resources/MailTemplates.js
+
+    const { email } = request.get()
+
+    const rules = {
+      email: 'required|email',
+    }
+
+    const validation = await validate(email, rules)
+
+    if(validation.fails()) {
+      return response.status(422).json({ errors: validation.messages() })
+    }
+
+    const user = await User.findBy('email', email)
+
+    if(!user) {
+      return response.status(422).json({ error: 'user not found' })
+    }
+
+    const mailSend = new UserService(user)
+
+    mailSend.sendPasswordRecoveryEmail()
+
+    return response.json({ message: 'please follow the instructions sent to your email' })
+
+  }
+
+  /**
+   * Replace user password
+   * POST /replace-password?oldpass=pass&newpass=pass&id
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
+  async replacePassword({ request, response }) {
+
+    const { id, oldpass, newpass } = request.get()
+
+    const rules = {
+      newpass: 'required|min:6|max:20',
+    }
+
+    const validation = await validate(newpass, rules)
+
+    if(validation.fails()) {
+      return response.status(422).json({ errors: validation.messages() })
+    }
+
+    const user = await User.find(id)
+
+    if(!user) {
+      return response.status(422).json({ error: 'user not found' })
+    }
+
+    const isSame = await Hash.verify(oldpass, user.password)
+
+    if(!isSame) {
+      return response.status(422).json({ error: 'wrong old password'})
+    }
+
+    user.password = newpass
+
+    await user.save()
+
+    return response.json({ message: 'password updated'})
+
+  }
+
 }
 
 module.exports = AuthController

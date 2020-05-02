@@ -21,7 +21,7 @@ const Route = use('Route')
 //Docs
 Route.get('/docs', async ({ request, response }) => {
 
-  return response.redirect('https://api-teach-docs.netlify.com/')
+  return response.redirect('https://api-teach-docs.netlify.app/')
 
 })
 
@@ -44,7 +44,13 @@ Route.group('users', () => {
 }).middleware('auth')
 
 //activate user account
-Route.get('/activate/', 'AuthController.activate')
+Route.get('/activate', 'AuthController.activate')
+
+//password recovery
+Route.post('/password-recovery', 'AuthController.passwordRecovery')
+
+//replace password
+Route.post('/replace-password', 'AuthController.replacePassword')
 
 
 //Posts routes

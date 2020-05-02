@@ -32,7 +32,39 @@ const userRegistration = (user) => {
       <a href="http://localhost:3333/activate/?id=${id}&code=${code}" target="_blank">
         <button>Ativar conta</button>
       </a>\n
-    `,
+    `
+  }
+
+  return msg
+
+}
+
+const passwordRecovery = (user) => {
+
+  //Observações
+  //O botão deve redirecionar o usuário ao frontend onde ele deve inserir os dados
+  //mas como ele ainda não está finalizado não haverá o redirecionamento
+
+  const id = user.id
+  const username = user.username
+  const email = user.email
+
+  const msg = {
+    to: email,
+    from: 'noreply@teach.com',
+    subject: 'Recuperação de senha',
+    html: `<h2> Olá ${username} </h2>\n
+      <p>
+        Esqueceu sua senha? Por favor clique no botão abaixo
+        para recuperá-la
+      </p>\n
+
+      <br>\n
+
+      <a href="http://google.com" target="_blank">
+        <button>Recuperar senha</button>
+      </a>\n
+    `
   }
 
   return msg
@@ -41,4 +73,4 @@ const userRegistration = (user) => {
 
 
 
-module.exports = { userRegistration }
+module.exports = { userRegistration, passwordRecovery }
