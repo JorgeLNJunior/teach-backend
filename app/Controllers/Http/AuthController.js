@@ -74,7 +74,9 @@ class AuthController {
     const user = await User.findBy('email', email)
 
     if(!user.is_activated) {
-      return response.status(403).json({ error: 'account not activated, please check your email' })
+      const erros = []
+      erros.push({ message: 'Conta não ativada, por favor verifique seu email' })
+      return response.status(401).send(erros)
     }
 
     return token
