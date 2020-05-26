@@ -42,7 +42,7 @@ class FollowController {
         user_id: f.user_id,
         followed_user: {
           id: usr.id,
-          username: usr.id,
+          username: usr.username,
           email: usr.email,
           avatar: usr.avatar,
           created_at: usr.created_at
