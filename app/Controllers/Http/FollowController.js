@@ -28,12 +28,32 @@ class FollowController {
     const user = await User.find(user_id)
 
     if(!user) {
-      return response.status(404).json({ error: 'user not found' })
+      return response.status(404).json({ error: 'Usuário não encontrado' })
     }
 
     const follows = await user.follows().fetch()
 
-    return response.json(follows)
+    const formatedFollows = []
+
+    for(let f of follows.rows) {
+      const usr = await User.find(f.$attributes.followed_user_id)
+      const follow = {
+        id: f.id,
+        user_id: f.user_id,
+        followed_user: {
+          id: usr.id,
+          username: usr.id,
+          email: usr.email,
+          avatar: usr.avatar,
+          created_at: usr.created_at
+        },
+        created_at: f.created_at,
+        updated_at: f.updated_at
+      }
+      formatedFollows.push(follow)
+    }
+
+    return response.json(formatedFollows)
 
   }
 
@@ -52,13 +72,15 @@ class FollowController {
     const user_id = auth.user.id
 
     if(followed_user_id == user_id) {
-      return response.status(422).json({ error: 'impossible to follow yourself' })
+      return response.status(422).json({
+        error: 'Não é possível seguir você mesmo'
+      })
     }
 
     const followed_user_exists = await User.find(followed_user_id)
 
     if(!followed_user_exists) {
-      return response.status(422).json({ error: 'user not found' })
+      return response.status(422).json({ error: 'Usuário não encontrado' })
     }
 
     let follow = await Database.from('follows').where({
