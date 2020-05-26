@@ -12,6 +12,8 @@ const userRegistration = (user) => {
   const month = date.getMonth()
   const year = date.getFullYear()
   const formatted_date = `${day}/${month}/${year}`
+  const productionBaseURL = 'https://teach-project.netlify.app'
+  //const developmentBaseURL = 'http://localhost:3333'
 
   const msg = {
     to: email,
@@ -29,7 +31,7 @@ const userRegistration = (user) => {
 
       <br>\n
 
-      <a href="http://localhost:3333/activate/?id=${id}&code=${code}" target="_blank">
+      <a href="${productionBaseURL}/activate/?id=${id}&code=${code}" target="_blank">
         <button>Ativar conta</button>
       </a>\n
     `
