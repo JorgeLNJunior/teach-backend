@@ -11,7 +11,7 @@ class UserSchema extends Schema {
       table.string('email', 254).notNullable().unique()
       table.string('password', 60).notNullable()
       table.integer('age')
-      table.string('avatar')
+      table.string('avatar').defaultTo('https://teachuploads.blob.core.windows.net/uploads/avatars/defaultAvatar.png')
       table.integer('activation_code')
       table.boolean('is_activated').defaultTo(false)
       table.timestamps()
