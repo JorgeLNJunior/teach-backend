@@ -93,7 +93,7 @@ class UserController {
 
     }
 
-    return response.json({ error: 'no valid query provided' })
+    return response.status(400).json({ error: 'no valid query provided' })
 
   }
 
