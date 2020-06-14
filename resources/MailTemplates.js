@@ -1,3 +1,4 @@
+const moment = require('moment')
 
 const userRegistration = (user) => {
 
@@ -6,12 +7,7 @@ const userRegistration = (user) => {
   const email = user.email
   const code = user.activation_code
 
-  const date = new Date(user.created_at)
-
-  const day = date.getDay()
-  const month = date.getMonth()
-  const year = date.getFullYear()
-  const formatted_date = `${day}/${month}/${year}`
+  const date = moment(user.created_at).locale('pt-br').format('LL')
   const productionBaseURL = 'https://teach-project.netlify.app'
   //const developmentBaseURL = 'http://localhost:3333'
 
@@ -27,7 +23,7 @@ const userRegistration = (user) => {
 
       <b>Nome: ${username}</b><br>\n
       <b>Email: ${email }</b><br>\n
-      <b>Data de registro: ${formatted_date}</b><br>\n
+      <b>Data de registro: ${date}</b><br>\n
 
       <br>\n
 
