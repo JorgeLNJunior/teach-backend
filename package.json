@@ -28,7 +28,7 @@
     "@adonisjs/validator": "^5.0.6",
     "@sendgrid/mail": "^7.0.0",
     "adonis-drive-azure-storage": "^4.1.4",
-    "moment": "^2.26.0",
+    "moment": "^2.29.4",
     "mysql": "^2.18.1"
   },
   "devDependencies": {},
